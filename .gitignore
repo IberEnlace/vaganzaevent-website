@@ -9,3 +9,6 @@ live-site.html
 *-search.html
 arda.html
 ismail.html
+
+.vercel
+.env*
