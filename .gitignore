@@ -1,0 +1,11 @@
+node_modules
+.next
+.vercel
+.env
+.env.local
+*.log
+*.tsbuildinfo
+live-site.html
+*-search.html
+arda.html
+ismail.html
