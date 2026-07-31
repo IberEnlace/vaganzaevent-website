@@ -14,3 +14,12 @@ CREATE TABLE IF NOT EXISTS "events" (
   "created_at" timestamp with time zone DEFAULT now() NOT NULL,
   "updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS "contact_messages" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "name" text NOT NULL,
+  "email" text NOT NULL,
+  "message" text NOT NULL,
+  "language" text DEFAULT 'en' NOT NULL,
+  "created_at" timestamp with time zone DEFAULT now() NOT NULL
+);

@@ -7,7 +7,7 @@ export const seedEvents: NewEvent[] = [
     descriptionEn: "An intimate night with the unmistakable voice of Redd, where alternative rock meets Lisbon.",
     descriptionPt: "Uma noite intimista com a voz inconfundível dos Redd, onde o rock alternativo encontra Lisboa.",
     date: "2026-09-18", time: "21:30", venue: "Vaganza, Lisboa", price: 35,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Do%C4%9Fan_Duru_Bronxpi_sahne_Konseri.JPG/1280px-Do%C4%9Fan_Duru_Bronxpi_sahne_Konseri.JPG",
+    image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Do%C4%9Fan_Duru_-_30.10.14.jpg?width=1800",
     published: true, featured: true
   },
   {

@@ -13,7 +13,7 @@ The public site uses safe built-in seed data when `DATABASE_URL` is absent, so b
 
 ## Production environment
 
-- `DATABASE_URL`: Vercel Marketplace/Neon PostgreSQL connection string
+- `DATABASE_URL`: Supabase PostgreSQL transaction-pooler connection string
 - `AUTH_SECRET`: random secret, at least 32 characters
 - `ADMIN_EMAIL`: administrator email
 - `ADMIN_PASSWORD_HASH`: bcrypt hash of the administrator password

@@ -17,5 +17,15 @@ export const events = pgTable("events", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow()
 });
 
+export const contactMessages = pgTable("contact_messages", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  message: text("message").notNull(),
+  language: text("language").notNull().default("en"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow()
+});
+
 export type EventRecord = typeof events.$inferSelect;
 export type NewEvent = typeof events.$inferInsert;
+export type NewContactMessage = typeof contactMessages.$inferInsert;
