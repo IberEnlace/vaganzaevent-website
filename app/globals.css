@@ -41,7 +41,7 @@ footer{grid-template-columns:1fr 1fr auto;align-items:center}
 
 /* Full-bleed concert hero and stronger Vaganza branding */
 .site-header{height:108px}
-.site-header .logo img{width:250px;height:92px}
+.site-header .logo img{width:290px;height:auto}
 .hero{
   background-image:url('/images/hero-concert.jpg');
   background-size:cover;
@@ -58,14 +58,14 @@ footer{grid-template-columns:1fr 1fr auto;align-items:center}
 .hero:after{z-index:1;background:linear-gradient(0deg,rgba(7,7,8,.72),transparent 32%)}
 .hero-content,.hero-meta{z-index:2}
 .hero h1{text-shadow:0 4px 34px rgba(0,0,0,.72)}
-footer .logo img{width:245px;height:96px}
-.manifesto .logo img{width:275px;height:110px;filter:brightness(0)}
+footer .logo img{width:285px;height:auto}
+.manifesto .logo img{width:315px;height:auto;filter:brightness(0)}
 
 @media(max-width:900px){
   .site-header{height:88px}
-  .site-header .logo img{width:180px;height:72px}
+  .site-header .logo img{width:205px;height:auto}
   .hero{background-position:58% center}
   .hero:before{background:linear-gradient(0deg,rgba(7,7,8,.96) 7%,rgba(7,7,8,.48) 62%,rgba(7,7,8,.25) 100%)}
-  footer .logo img{width:210px;height:84px}
-  .manifesto .logo img{width:225px;height:90px}
+  footer .logo img{width:235px;height:auto}
+  .manifesto .logo img{width:255px;height:auto}
 }
