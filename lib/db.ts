@@ -13,7 +13,13 @@ function database() {
 export async function getPublishedEvents() {
   const db = database();
   if (!db) return seedEvents.map((event, index) => ({ ...event, id: index + 1, published: event.published ?? true, featured: event.featured ?? false }));
-  return db.select().from(events).where(eq(events.published, true)).orderBy(desc(events.featured), events.date);
+  try {
+    return await db.select().from(events).where(eq(events.published, true)).orderBy(desc(events.featured), events.date);
+  } catch (error) {
+    const cause = error instanceof Error && "cause" in error ? error.cause : error;
+    console.error("Vaganza database query failed:", cause);
+    return seedEvents.map((event, index) => ({ ...event, id: index + 1, published: event.published ?? true, featured: event.featured ?? false }));
+  }
 }
 
 export async function getAllEvents() {
