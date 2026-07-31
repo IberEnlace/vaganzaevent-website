@@ -44,7 +44,7 @@ const experienceImages = [
   "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1000&q=85",
   "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1000&q=85",
   "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1571266028243-d220c9c3b2d2?auto=format&fit=crop&w=1000&q=85",
+  "/images/dj-performance.jpg",
   "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1000&q=85"
 ];
 
@@ -54,6 +54,7 @@ export default function HomeClient({ events }: { events: Event[] }) {
   const [open, setOpen] = useState(false);
   const [contactState, setContactState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
   const t = copy[lang];
+  const displayImage = (event: Event) => event.titleEn.toLocaleLowerCase("tr").includes("arda aygün") ? "/images/arda-aygun.jpg" : event.image;
   const total = useMemo(() => events.reduce((sum, event) => sum + event.price * (cart[event.id] ?? 0), 0), [cart, events]);
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
   const update = (id: number, change: number) => setCart((current) => ({ ...current, [id]: Math.max(0, (current[id] ?? 0) + change) }));
@@ -97,14 +98,12 @@ export default function HomeClient({ events }: { events: Event[] }) {
       </header>
 
       <section className="hero">
-        <div className="hero-glow" />
         <div className="hero-content">
           <p className="eyebrow">{t.heroKicker}</p>
           <h1>{t.heroTitle}</h1>
           <p className="hero-copy">{t.heroText}</p>
           <div className="hero-actions"><a className="button gold" href="#events">{t.explore}</a><a className="button ghost" href="https://wa.me/351912372921" target="_blank">{t.reserve}</a></div>
         </div>
-        <div className="hero-art" aria-hidden="true"><span className="arch arch-one" /><span className="arch arch-two" /><span className="arch arch-three" /><i>V</i></div>
         <div className="hero-meta"><span>{t.upcoming}</span><strong>{events.length}</strong><small>{t.events}</small></div>
       </section>
 
@@ -117,7 +116,7 @@ export default function HomeClient({ events }: { events: Event[] }) {
             const description = lang === "en" ? event.descriptionEn : event.descriptionPt;
             const date = new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "pt-PT", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${event.date}T12:00:00`));
             return <article className="event-card" key={event.id}>
-              <div className="event-image"><Image src={event.image} alt={title} fill sizes="(max-width: 800px) 100vw, 33vw" /><span>€{event.price}</span></div>
+              <div className="event-image"><Image src={displayImage(event)} alt={title} fill sizes="(max-width: 800px) 100vw, 33vw" /><span>€{event.price}</span></div>
               <div className="event-body">
                 <p className="event-date"><CalendarDays size={15} /> {date}</p><h3>{title}</h3><p>{description}</p>
                 <div className="details"><span><Clock3 size={15} />{event.time}</span><span><MapPin size={15} />{event.venue}</span></div>

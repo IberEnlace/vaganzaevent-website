@@ -16,7 +16,7 @@ export const seedEvents: NewEvent[] = [
     descriptionEn: "Songs, stories and warm acoustic arrangements in a close-up boutique setting.",
     descriptionPt: "Canções, histórias e arranjos acústicos num ambiente boutique e próximo.",
     date: "2026-10-03", time: "21:00", venue: "Vaganza, Lisboa", price: 28,
-    image: "https://app.bodrumflow.com/storage/v1/object/public/event-photos/instagram/stories/gumusluksahne/2026-05/3904175807001680167-gumusluksahne-7195cb465a.png",
+    image: "/images/arda-aygun.jpg",
     published: true, featured: true
   },
   {
