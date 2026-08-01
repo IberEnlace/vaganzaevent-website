@@ -68,20 +68,22 @@ export default function HomeClient({ events }: { events: Event[] }) {
     setContactState("sending");
     const form = event.currentTarget;
     const fields = new FormData(form);
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: fields.get("name"),
-        email: fields.get("email"),
-        message: fields.get("message"),
-        language: lang
-      })
-    });
-    if (response.ok) {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fields.get("name"),
+          email: fields.get("email"),
+          message: fields.get("message"),
+          website: fields.get("website"),
+          language: lang
+        })
+      });
+      if (!response.ok) throw new Error("Contact request failed");
       form.reset();
       setContactState("sent");
-    } else {
+    } catch {
       setContactState("failed");
     }
   };
@@ -147,6 +149,7 @@ export default function HomeClient({ events }: { events: Event[] }) {
           </div>
         </div>
         <form className="contact-form" onSubmit={sendContact}>
+          <label className="contact-honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
           <label>{t.name}<input name="name" required /></label>
           <label>{t.email}<input name="email" type="email" required /></label>
           <label>{t.message}<textarea name="message" required rows={6} /></label>
