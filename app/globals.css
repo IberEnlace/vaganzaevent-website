@@ -76,3 +76,13 @@ footer .logo img{width:180px;height:auto}
   .site-header .logo img{width:170px}
   .site-header nav{gap:18px}
 }
+
+
+/* Completed-event archive */
+.past-events-section{background:#171819;color:var(--paper)}
+.past-events-section .section-heading>p{color:#aaa}
+.past-events-section .event-card{background:#222;color:var(--paper)}
+.past-events-section .event-body>p:not(.event-date){color:#aaa}
+.past-events-section .details{color:#aaa;border-top-color:#ffffff18}
+.past-events-section .event-image img{filter:grayscale(.2) brightness(.72)}
+.event-image .past-badge{left:18px;right:auto;background:#171819;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;font-size:10px}
