@@ -93,7 +93,7 @@ export default function AdminClient({ authenticated, initialEvents }: { authenti
           <button type="button" className={imageMode === "url" ? "active" : ""} onClick={() => { setImageMode("url"); setForm({ ...form, image: "" }); }}><Link2 /> Enter image URL</button>
         </div>
         {imageMode === "url"
-          ? <label>Image URL<input required type="url" placeholder="https://..." value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} /></label>
+          ? <label>Image URL<input required type="text" inputMode="url" placeholder="https://... or /images/photo.jpg" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} /></label>
           : <label className="upload-box"><Upload /><strong>{uploading ? "Uploading…" : form.image ? "Image uploaded — choose another" : "Choose image"}</strong><small>JPG, PNG, WebP or GIF · maximum 3 MB</small><input required={!form.image} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={uploadImage} /></label>}
         {form.image && <div className="image-preview" style={{ backgroundImage: `url("${form.image}")` }} />}
       </div></div>
