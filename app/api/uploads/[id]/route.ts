@@ -20,7 +20,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     const image = rows[0];
     if (!image) return NextResponse.json({ error: "Image not found." }, { status: 404 });
 
-    return new Response(image.data, {
+    return new Response(new Uint8Array(image.data), {
       headers: {
         "Content-Type": image.content_type,
         "Cache-Control": "public, max-age=31536000, immutable"
