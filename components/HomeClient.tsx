@@ -17,6 +17,7 @@ const copy = {
     heroTitle: "Where every night becomes a story.", heroText: "Intimate concerts, soulful tables and boutique experiences in the heart of Lisbon.",
     explore: "Explore events", reserve: "Private reservations", upcoming: "Upcoming", events: "events",
     discover: "Discover our next nights", discoverText: "Limited seats. Unforgettable company. Made with soul in Lisboa.",
+    past: "Past events", pastTitle: "Nights we remember", pastText: "A look back at Vaganza gatherings that brought music, culture and people together.", completed: "Completed",
     add: "Add to cart", experienceTitle: "More than a venue", experienceSub: "Five ways to experience Vaganza",
     experiences: [["Fado Nights","Voices, guitar and the soul of Lisboa."],["Rakı Table","Long conversations, shared plates and Anatolian spirit."],["Wine Tasting","Small Portuguese producers, carefully selected."],["DJ Sessions","Eclectic late nights for curious ears."],["Boutique Events","Private celebrations designed around you."]],
     cart: "Your tickets", empty: "Your next unforgettable night starts here.", total: "Total", whatsapp: "Reserve on WhatsApp",
@@ -30,6 +31,7 @@ const copy = {
     heroTitle: "Onde cada noite se torna uma história.", heroText: "Concertos intimistas, mesas com alma e experiências boutique no coração de Lisboa.",
     explore: "Ver eventos", reserve: "Reservas privadas", upcoming: "Próximos", events: "eventos",
     discover: "Descubra as nossas próximas noites", discoverText: "Lugares limitados. Companhia inesquecível. Feito com alma em Lisboa.",
+    past: "Eventos passados", pastTitle: "Noites que recordamos", pastText: "Um olhar sobre os encontros Vaganza que reuniram música, cultura e pessoas.", completed: "Realizado",
     add: "Adicionar", experienceTitle: "Mais do que um espaço", experienceSub: "Cinco formas de viver a Vaganza",
     experiences: [["Noites de Fado","Vozes, guitarra e a alma de Lisboa."],["Mesa de Rakı","Conversas longas, pratos partilhados e espírito da Anatólia."],["Prova de Vinhos","Pequenos produtores portugueses, cuidadosamente escolhidos."],["Sessões de DJ","Noites ecléticas para ouvidos curiosos."],["Eventos Boutique","Celebrações privadas desenhadas à sua medida."]],
     cart: "Os seus bilhetes", empty: "A sua próxima noite inesquecível começa aqui.", total: "Total", whatsapp: "Reservar no WhatsApp",
@@ -55,11 +57,18 @@ export default function HomeClient({ events }: { events: Event[] }) {
   const [contactState, setContactState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
   const t = copy[lang];
   const displayImage = (event: Event) => event.titleEn.toLocaleLowerCase("tr").includes("arda aygün") ? "/images/arda-aygun.jpg" : event.image;
-  const total = useMemo(() => events.reduce((sum, event) => sum + event.price * (cart[event.id] ?? 0), 0), [cart, events]);
+  const { upcomingEvents, pastEvents } = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    return {
+      upcomingEvents: events.filter((event) => event.date >= today),
+      pastEvents: events.filter((event) => event.date < today).sort((a, b) => b.date.localeCompare(a.date))
+    };
+  }, [events]);
+  const total = useMemo(() => upcomingEvents.reduce((sum, event) => sum + event.price * (cart[event.id] ?? 0), 0), [cart, upcomingEvents]);
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
   const update = (id: number, change: number) => setCart((current) => ({ ...current, [id]: Math.max(0, (current[id] ?? 0) + change) }));
   const reserve = () => {
-    const lines = events.filter((e) => cart[e.id]).map((e) => `${cart[e.id]}× ${lang === "en" ? e.titleEn : e.titlePt} (€${e.price})`);
+    const lines = upcomingEvents.filter((e) => cart[e.id]).map((e) => `${cart[e.id]}× ${lang === "en" ? e.titleEn : e.titlePt} (€${e.price})`);
     const message = lang === "en" ? `Hello Vaganza, I'd like to reserve:\n${lines.join("\n")}\nTotal: €${total}` : `Olá Vaganza, gostaria de reservar:\n${lines.join("\n")}\nTotal: €${total}`;
     window.open(`https://wa.me/351912372921?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   };
@@ -106,14 +115,14 @@ export default function HomeClient({ events }: { events: Event[] }) {
           <p className="hero-copy">{t.heroText}</p>
           <div className="hero-actions"><a className="button gold" href="#events">{t.explore}</a><a className="button ghost" href="https://wa.me/351912372921" target="_blank">{t.reserve}</a></div>
         </div>
-        <div className="hero-meta"><span>{t.upcoming}</span><strong>{events.length}</strong><small>{t.events}</small></div>
+        <div className="hero-meta"><span>{t.upcoming}</span><strong>{upcomingEvents.length}</strong><small>{t.events}</small></div>
       </section>
 
       <section id="events" className="section events-section">
         <p className="eyebrow">{t.upcoming.toUpperCase()} {t.events.toUpperCase()}</p>
         <div className="section-heading"><h2>{t.discover}</h2><p>{t.discoverText}</p></div>
         <div className="event-grid">
-          {events.map((event) => {
+          {upcomingEvents.map((event) => {
             const title = lang === "en" ? event.titleEn : event.titlePt;
             const description = lang === "en" ? event.descriptionEn : event.descriptionPt;
             const date = new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "pt-PT", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${event.date}T12:00:00`));
@@ -128,6 +137,25 @@ export default function HomeClient({ events }: { events: Event[] }) {
           })}
         </div>
       </section>
+
+      {pastEvents.length > 0 && <section id="past-events" className="section past-events-section">
+        <p className="eyebrow">{t.past.toUpperCase()}</p>
+        <div className="section-heading"><h2>{t.pastTitle}</h2><p>{t.pastText}</p></div>
+        <div className="event-grid">
+          {pastEvents.map((event) => {
+            const title = lang === "en" ? event.titleEn : event.titlePt;
+            const description = lang === "en" ? event.descriptionEn : event.descriptionPt;
+            const date = new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "pt-PT", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${event.date}T12:00:00`));
+            return <article className="event-card" key={event.id}>
+              <div className="event-image"><Image src={displayImage(event)} alt={title} fill sizes="(max-width: 800px) 100vw, 50vw" /><span className="past-badge">{t.completed}</span></div>
+              <div className="event-body">
+                <p className="event-date"><CalendarDays size={15} /> {date}</p><h3>{title}</h3><p>{description}</p>
+                <div className="details"><span><Clock3 size={15} />{event.time}</span><span><MapPin size={15} />{event.venue}</span></div>
+              </div>
+            </article>;
+          })}
+        </div>
+      </section>}
 
       <section id="experiences" className="section experience-section">
         <p className="eyebrow">{t.experienceTitle.toUpperCase()}</p><div className="section-heading"><h2>{t.experienceSub}</h2></div>
@@ -172,7 +200,7 @@ export default function HomeClient({ events }: { events: Event[] }) {
       <div className={`cart-overlay ${open ? "open" : ""}`} onClick={() => setOpen(false)} />
       <aside className={`cart ${open ? "open" : ""}`} aria-hidden={!open}>
         <div className="cart-head"><div><p className="eyebrow">VAGANZA</p><h2>{t.cart}</h2></div><button onClick={() => setOpen(false)}><X /></button></div>
-        <div className="cart-items">{count === 0 ? <div className="empty"><ShoppingBag /><p>{t.empty}</p></div> : events.filter((e) => cart[e.id]).map((e) => <div className="cart-item" key={e.id}>
+        <div className="cart-items">{count === 0 ? <div className="empty"><ShoppingBag /><p>{t.empty}</p></div> : upcomingEvents.filter((e) => cart[e.id]).map((e) => <div className="cart-item" key={e.id}>
           <Image src={e.image} alt="" width={72} height={72} /><div><strong>{lang === "en" ? e.titleEn : e.titlePt}</strong><small>€{e.price}</small><div className="qty"><button onClick={() => update(e.id, -1)}><Minus /></button><span>{cart[e.id]}</span><button onClick={() => update(e.id, 1)}><Plus /></button></div></div>
         </div>)}</div>
         {count > 0 && <div className="cart-bottom"><div><span>{t.total}</span><strong>€{total}</strong></div><button onClick={reserve}>{t.whatsapp}</button><small>{count} {t.seats}</small></div>}
